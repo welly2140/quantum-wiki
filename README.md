@@ -1,4 +1,4 @@
-# 量子計算基本概念：LLM Wiki → 教學 HTML 簡報
+# 量子計算基本概念
 
 Repo：https://github.com/welly2140/quantum-wiki
 
