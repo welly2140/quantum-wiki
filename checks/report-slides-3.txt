@@ -1,0 +1,19 @@
+﻿=== 逐頁明細 ===
+ 1. 量子計算是什麼？ | wiki: index.md | 來源:  | 無圖
+ 2. 學習路線圖 | wiki: index.md | 來源:  | 無圖
+ 3. 為什麼需要量子計算？量子系統太難模擬 | wiki: concepts/why-quantum-computing.md | 來源: S1,S6 | SVG圖
+ 4. 量子演算法的里程碑 | wiki: concepts/why-quantum-computing.md | 來源: S1,S6 | 無圖
+ 5. 位元 (bit) vs 量子位元 (qubit) | wiki: concepts/bit-vs-qubit.md | 來源: S1,S3,S6 | SVG圖
+ 6. 疊加 (superposition) | wiki: concepts/superposition.md | 來源: S1,S2,S3 | SVG圖
+ 7. 測量 (measurement) | wiki: concepts/measurement.md | 來源: S2,S3,S4 | SVG圖
+ 8. 量子閘 (quantum gates) | wiki: concepts/quantum-gates.md | 來源: S1,S2,S4 | 無圖
+ 9. 量子電路 (quantum circuits) | wiki: concepts/quantum-circuits.md,concepts/quantum-gates.md | 來源: S4,S6 | SVG圖
+10. 糾纏 (entanglement) | wiki: concepts/entanglement.md | 來源: S1,S5 | SVG圖
+11. 干涉 (interference)：量子演算法的關鍵 | wiki: concepts/interference.md | 來源: S2,S3,S6 | SVG圖
+12. 退相干與建造量子電腦的挑戰 | wiki: concepts/decoherence-and-error-correction.md | 來源: S1,S3,S6 | SVG圖
+13. 常見迷思與現況 | wiki: concepts/misconceptions-and-status.md | 來源: S1,S5,S6 | SVG圖
+14. 重點回顧與小測驗 | wiki: concepts/bit-vs-qubit.md,concepts/superposition.md,concepts/measurement.md,concepts/entanglement.md,concepts/interference.md,concepts/misconceptions-and-status.md | 來源: S3,S4,S5,S6 | 無圖
+15. 參考來源 | wiki: sources/S1.md,sources/S2.md,sources/S3.md,sources/S4.md,sources/S5.md,sources/S6.md | 來源: S1,S2,S3,S4,S5,S6 | 無圖
+簡報中檢查過的不同數字：22 個；Wiki 查無者：0 個
+slides: 15
+SLIDE CHECK PASS

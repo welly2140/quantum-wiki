@@ -1,0 +1,13 @@
+﻿=== 逐頁明細 ===
+bit-vs-qubit                             事實句 10，有來源 10，引用 S1,S3,S6
+decoherence-and-error-correction         事實句 12，有來源 12，引用 S1,S3,S6
+entanglement                             事實句 10，有來源 10，引用 S1,S5
+interference                             事實句  6，有來源  6，引用 S2,S3,S6
+measurement                              事實句  9，有來源  9，引用 S2,S3,S4,S6
+misconceptions-and-status                事實句  8，有來源  8，引用 S1,S5,S6
+quantum-circuits                         事實句  7，有來源  7，引用 S4,S6
+quantum-gates                            事實句 11，有來源 11，引用 S1,S2,S4,S6
+superposition                            事實句  9，有來源  9，引用 S1,S2,S3
+why-quantum-computing                    事實句  9，有來源  9，引用 S1,S6
+concept pages: 10
+LINT PASS
