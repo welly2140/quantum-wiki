@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>量子計算是什麼？基本概念入門</title>
+<style>
+:root{--bg:#0f1b2d;--card:#16263f;--ink:#eaf1fb;--mute:#9fb3cf;--acc:#5eead4;--acc2:#fbbf24;--bad:#f87171;--line:#2a3f60}
+@media (prefers-color-scheme: light){:root{--bg:#f4f7fb;--card:#fff;--ink:#14213a;--mute:#51627f;--acc:#0f766e;--acc2:#b45309;--bad:#b91c1c;--line:#d5deec}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+#deck{height:100%;display:flex;flex-direction:column}
+.slides{flex:1;position:relative;overflow:hidden}
+.slide{display:none;position:absolute;inset:0;overflow-y:auto;padding:clamp(16px,4vw,48px) clamp(16px,6vw,80px) 56px}
+.slide.active{display:block}
+h1{font-size:clamp(28px,5vw,52px);margin:.2em 0}
+h2{font-size:clamp(22px,3.4vw,38px);margin:0 0 .6em;color:var(--acc)}
+ul{padding-left:1.2em;line-height:1.75;font-size:clamp(16px,2vw,22px)}
+li{margin:.3em 0}
+.sub{color:var(--mute);font-size:clamp(16px,2vw,22px)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.card h3{margin:.1em 0 .5em;color:var(--acc2);font-size:clamp(17px,2vw,22px)}
+.tag{display:inline;color:var(--mute);font-size:11px;font-weight:400;opacity:.8;margin:0 1px 0 4px;vertical-align:super;line-height:1}
+.slide:has(figure).active{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:32px;align-content:start}
+.slide:has(figure)>*{grid-column:1}
+.slide:has(figure)>h2{grid-column:1/-1}
+.slide:has(figure)>figure{grid-column:2;grid-row:2 / span 8;align-self:start}
+@media(max-width:900px){.slide:has(figure).active{display:block}}
+figure{margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+figcaption{font-size:13px;color:var(--mute);margin-top:6px;text-align:center}
+svg .f{fill:var(--acc)} svg .f2{fill:var(--acc2)} svg .d{stroke:var(--mute);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+svg .a{stroke:var(--acc);stroke-width:2.5;fill:none} svg .r{stroke:var(--bad);stroke-width:2.5;fill:none}
+svg .m{fill:var(--mute);font-size:12px}
+.src{position:absolute;left:clamp(16px,6vw,80px);bottom:10px;font-size:13px;color:var(--mute)}
+.bad{color:var(--bad)} .ok{color:var(--acc)}
+code,.mono{font-family:Consolas,monospace;background:var(--line);padding:1px 6px;border-radius:4px}
+svg{max-width:100%;height:auto}
+svg text{fill:var(--ink);font-size:14px}
+svg .l{stroke:var(--ink);stroke-width:2;fill:none}
+svg .b{fill:var(--card);stroke:var(--acc);stroke-width:2}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:10px 0;font-size:clamp(16px,2vw,20px)}
+summary{cursor:pointer}
+.bar{display:flex;align-items:center;gap:12px;padding:8px 16px;border-top:1px solid var(--line);background:var(--card)}
+.bar button{background:var(--acc);color:#04201c;border:0;border-radius:8px;padding:8px 16px;font-size:16px;cursor:pointer}
+.bar button:disabled{opacity:.4;cursor:default}
+.prog{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--acc);width:0}
+#cnt{color:var(--mute);min-width:64px;text-align:right}
+</style>
+</head>
+<body>
+<div id="deck">
+<div class="slides">
+
+<section class="slide active" data-wiki="index.md">
+  <h1>量子計算是什麼？</h1>
+  <p class="sub">給完全沒學過的人：用 10 個概念看懂量子計算的基本原理</p>
+  <ul>
+    <li>內容全部來自自建的「量子計算基本概念」LLM Wiki</li>
+    <li>每一頁底部標示對應的 Wiki 頁面與資料來源</li>
+    <li>操作：左右方向鍵、按鈕，或在手機上點下方按鈕翻頁</li>
+  </ul>
+  <div class="src">資料來源：Wiki 目錄（S1–S6 整理）</div>
+</section>
+
+<section class="slide" data-wiki="index.md">
+  <h2>學習路線圖</h2>
+  <div class="cols">
+    <div class="card"><h3>基礎</h3><ul><li>為什麼需要量子計算</li><li>位元 vs 量子位元</li><li>疊加</li><li>測量</li></ul></div>
+    <div class="card"><h3>運作方式</h3><ul><li>量子閘與電路</li><li>糾纏</li><li>干涉</li></ul></div>
+    <div class="card"><h3>現實面</h3><ul><li>退相干與錯誤更正</li><li>常見迷思與現況</li></ul></div>
+    <div class="card"><h3>最後</h3><ul><li>重點回顧</li><li>小測驗</li></ul></div>
+  </div>
+  <div class="src">資料來源：Wiki 目錄</div>
+</section>
+
+<section class="slide" data-wiki="concepts/why-quantum-computing.md">
+  <h2>為什麼需要量子計算？量子系統太難模擬</h2>
+  <figure>
+    <svg viewBox="0 0 280 240" role="img" aria-label="長條圖：41 個位置所需記憶體是 40 個位置的兩倍">
+      <line class="l" x1="20" y1="200" x2="260" y2="200"/>
+      <rect class="f" x="45" y="130" width="70" height="70" rx="4"/>
+      <rect class="f2" x="155" y="60" width="70" height="140" rx="4"/>
+      <text x="40" y="120">超過 130 GB</text><text x="150" y="50">超過 260 GB</text>
+      <text x="48" y="220">40 個位置</text><text x="158" y="220">41 個位置</text>
+    </svg>
+    <figcaption>多一個位置，古典電腦需存的數字就加倍 [S1]</figcaption>
+  </figure>
+  <ul>
+    <li>1980 年代，Feynman 與 Manin 提出：用量子現象做的硬體，可能更適合模擬量子系統 <span class="tag">S1</span></li>
+    <li>量子層級的物質，是多種組態（狀態）同時存在的組合 <span class="tag">S1</span></li>
+    <li>40 個位置有 2<sup>40</sup> 種狀態：古典電腦要存 2<sup>40</sup> 個數字（超過 130 GB），量子電腦只需 40 個 qubit <span class="tag">S1</span></li>
+    <li>一般而言，n 個 qubit 需要 2<sup>n</sup> 個古典數值來描述，所以古典模擬很快變得困難 <span class="tag">S6</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/why-quantum-computing.md ｜資料來源：[S1][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/why-quantum-computing.md">
+  <h2>量子演算法的里程碑</h2>
+  <div class="cols">
+    <div class="card"><h3>1985　Deutsch</h3>量子電腦可以有效模擬任何物理系統的行為 <span class="tag">S1</span></div>
+    <div class="card"><h3>1994　Shor</h3>質因數分解比已知最佳古典演算法快指數倍，可能威脅 RSA 與橢圓曲線密碼 <span class="tag">S1</span><span class="tag">S6</span></div>
+    <div class="card"><h3>1996　Grover</h3>無結構搜尋有二次方加速；比 Shor 溫和，但適用範圍廣 <span class="tag">S6</span></div>
+    <div class="card"><h3>其他應用</h3>搜尋無序資料庫、解線性方程組、機器學習，以及化學、物理與材料科學的模擬 <span class="tag">S1</span></div>
+  </div>
+  <div class="src">Wiki：concepts/why-quantum-computing.md ｜資料來源：[S1][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/bit-vs-qubit.md">
+  <h2>位元 (bit) vs 量子位元 (qubit)</h2>
+  <figure>
+    <svg viewBox="0 0 260 270" role="img" aria-label="Bloch 球：古典位元只在兩極，qubit 可在球面任意位置">
+      <circle class="l" cx="130" cy="135" r="90"/>
+      <ellipse class="d" cx="130" cy="135" rx="90" ry="28"/>
+      <line class="d" x1="130" y1="45" x2="130" y2="225"/>
+      <circle class="f2" cx="130" cy="45" r="6"/><circle class="f2" cx="130" cy="225" r="6"/>
+      <text x="140" y="38">|0⟩ 北極（古典 0）</text><text x="140" y="250">|1⟩ 南極（古典 1）</text>
+      <line class="a" x1="130" y1="135" x2="184" y2="92"/><circle class="f" cx="184" cy="92" r="7"/>
+      <text x="192" y="96">qubit</text>
+    </svg>
+    <figcaption>Bloch 球：古典位元只在兩極，qubit 可在球面任意位置 [S3]</figcaption>
+  </figure>
+  <div class="cols">
+    <div class="card"><h3>古典位元</h3><ul><li>任一時刻只能是 0 或 1 <span class="tag">S1</span></li><li>測量不會擾動它 <span class="tag">S3</span></li><li>Bloch 球上只在北極 (|0⟩) 與南極 (|1⟩) <span class="tag">S3</span></li></ul></div>
+    <div class="card"><h3>量子位元</h3><ul><li>可處於 0 與 1 的疊加，有無限多種合法狀態 <span class="tag">S1</span></li><li>需要兩個複數描述 <span class="tag">S3</span></li><li>測量會破壞相干性、擾動疊加態 <span class="tag">S3</span></li></ul></div>
+  </div>
+  <ul>
+    <li>8 個位元可編碼 256 種值，但一次只表示其中一個；8 個 qubit 可處於全部 256 種狀態的疊加 <span class="tag">S1</span></li>
+    <li>但測量只會得到一個結果，所以「能表示」不等於「同時算完」<span class="tag">S6</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/bit-vs-qubit.md ｜資料來源：[S1][S3][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/superposition.md">
+  <h2>疊加 (superposition)</h2>
+  <figure>
+    <svg viewBox="0 0 280 220" role="img" aria-label="|+⟩ 態中 |0⟩ 與 |1⟩ 的振幅相等">
+      <line class="l" x1="20" y1="180" x2="260" y2="180"/>
+      <rect class="f" x="55" y="70" width="62" height="110" rx="4"/><rect class="f" x="165" y="70" width="62" height="110" rx="4"/>
+      <text x="40" y="58">α = 1/√2</text><text x="150" y="58">β = 1/√2</text>
+      <text x="68" y="202">|0⟩</text><text x="178" y="202">|1⟩</text>
+    </svg>
+    <figcaption>|+⟩ 態：|0⟩ 與 |1⟩ 的振幅各為 1/√2 [S2]</figcaption>
+  </figure>
+  <ul>
+    <li>qubit 的一般狀態：<code>|ψ⟩ = α|0⟩ + β|1⟩</code>，α、β 是複數機率振幅 <span class="tag">S3</span></li>
+    <li>歸一化：|α|² + |β|² = 1 <span class="tag">S3</span></li>
+    <li>「疊加」與「線性組合」基本上是同義詞 <span class="tag">S2</span></li>
+    <li>例：<code>|+⟩ = (1/√2)|0⟩ + (1/√2)|1⟩</code> <span class="tag">S2</span></li>
+    <li>比喻：你不可能同時面向左和右，但量子粒子可以有一定機率面向左、同時有一定機率面向右 <span class="tag">S1</span></li>
+    <li>α 與 β 的相對相位 (relative phase) 負責量子干涉 <span class="tag">S3</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/superposition.md ｜資料來源：[S1][S2][S3]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/measurement.md">
+  <h2>測量 (measurement)</h2>
+  <figure>
+    <svg viewBox="0 0 280 250" role="img" aria-label="測量流程：疊加態經測量得到 0 或 1">
+      <rect class="b" x="50" y="10" width="180" height="40" rx="6"/><text x="62" y="35">|ψ⟩ = α|0⟩ + β|1⟩</text>
+      <line class="a" x1="140" y1="50" x2="140" y2="95"/><polygon class="f" points="140,102 133,90 147,90"/>
+      <text x="152" y="82">測量（不可逆）</text>
+      <rect class="b" x="15" y="110" width="110" height="46" rx="6"/><text x="30" y="130">得到 0</text><text x="30" y="148" class="m">機率 |α|²</text>
+      <rect class="b" x="155" y="110" width="110" height="46" rx="6"/><text x="170" y="130">得到 1</text><text x="170" y="148" class="m">機率 |β|²</text>
+      <line class="a" x1="140" y1="102" x2="70" y2="110"/><line class="a" x1="140" y1="102" x2="210" y2="110"/>
+      <text x="40" y="190" class="m">每次測量只會看到其中一個古典結果</text>
+    </svg>
+    <figcaption>測量只回傳一個古典狀態，機率由振幅決定 [S2][S3]</figcaption>
+  </figure>
+  <ul>
+    <li>標準基底測量看到的不是態向量，而是一個古典狀態 <span class="tag">S2</span></li>
+    <li>出現機率 = 對應分量絕對值的平方（Born rule）：測得 |0⟩ 的機率是 |α|²，測得 |1⟩ 的機率是 |β|² <span class="tag">S2</span><span class="tag">S3</span></li>
+    <li>測量不可逆，會讓相干性消失；若結果是 |1⟩，α 變成 0、β 變成 1 <span class="tag">S3</span></li>
+    <li>測量不是量子閘，因為它不可逆 <span class="tag">S4</span></li>
+    <li>|+⟩ 與 |−⟩ 直接測量時，0 和 1 的機率各一半；先套用 Hadamard 再測量就能完全分辨 <span class="tag">S2</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/measurement.md ｜資料來源：[S2][S3][S4]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/quantum-gates.md">
+  <h2>量子閘 (quantum gates)</h2>
+  <p class="sub">量子閘是作用在少數 qubit 上的基本量子電路，是幺正 (unitary) 變換，而且可逆 <span class="tag">S4</span></p>
+  <div class="cols">
+    <div class="card"><h3>Hadamard (H)</h3>|0⟩ → (|0⟩+|1⟩)/√2，從基底態產生均等疊加；H 是自己的反操作 <span class="tag">S4</span></div>
+    <div class="card"><h3>Pauli-X</h3>量子版 NOT（位元翻轉）：|0⟩→|1⟩、|1⟩→|0⟩ <span class="tag">S2</span><span class="tag">S4</span></div>
+    <div class="card"><h3>Pauli-Z</h3>相位翻轉：|0⟩ 不變、|1⟩ → −|1⟩ <span class="tag">S2</span><span class="tag">S4</span></div>
+    <div class="card"><h3>CNOT（受控非）</h3>兩個 qubit：控制為 |1⟩ 時才翻轉目標，|a,b⟩ → |a, a⊕b⟩ <span class="tag">S4</span></div>
+  </div>
+  <ul><li>不需要能做所有操作，只需一組通用閘集，其他操作都能分解成它們的序列 <span class="tag">S1</span></li></ul>
+  <div class="src">Wiki：concepts/quantum-gates.md ｜資料來源：[S1][S2][S4]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/quantum-circuits.md,concepts/quantum-gates.md">
+  <h2>量子電路 (quantum circuits)</h2>
+  <svg viewBox="0 0 520 130" role="img" aria-label="示意電路：上線 H 閘後接 CNOT 控制點，下線 CNOT 目標，最後測量">
+    <text x="4" y="40">qubit 1</text><text x="4" y="100">qubit 2</text>
+    <line class="l" x1="70" y1="36" x2="500" y2="36"/><line class="l" x1="70" y1="96" x2="500" y2="96"/>
+    <rect class="b" x="110" y="20" width="36" height="32" rx="4"/><text x="121" y="42">H</text>
+    <circle cx="240" cy="36" r="6" fill="currentColor" style="fill:var(--ink)"/>
+    <line class="l" x1="240" y1="36" x2="240" y2="96"/>
+    <circle class="l" cx="240" cy="96" r="12"/><line class="l" x1="228" y1="96" x2="252" y2="96"/>
+    <rect class="b" x="350" y="20" width="44" height="32" rx="4"/><text x="360" y="42">測量</text>
+    <rect class="b" x="350" y="80" width="44" height="32" rx="4"/><text x="360" y="102">測量</text>
+  </svg>
+  <p class="sub">示意圖：H 閘、CNOT、測量（示範圖形，非特定演算法）</p>
+  <ul>
+    <li>閘畫成水平線上的符號，每條線代表一個 qubit <span class="tag">S4</span></li>
+    <li>單線是 qubit，雙線是古典位元；測量符號把 qubit 線輸出成古典線 <span class="tag">S4</span></li>
+    <li>圖上先 A 後 B，矩陣乘法順序相反：C = B·A <span class="tag">S4</span></li>
+    <li>電路中的測量可以延後到最後 <span class="tag">S6</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/quantum-circuits.md ｜資料來源：[S4][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/entanglement.md">
+  <h2>糾纏 (entanglement)</h2>
+  <figure>
+    <svg viewBox="0 0 300 220" role="img" aria-label="Alice 與 Bob 的糾纏 qubit，測量結果反相關">
+      <circle class="b" cx="60" cy="60" r="28"/><text x="46" y="65">A</text>
+      <circle class="b" cx="240" cy="60" r="28"/><text x="226" y="65">B</text>
+      <path class="a" d="M88 60 C 120 30, 135 90, 150 60 S 190 30, 212 60"/>
+      <text x="108" y="20" class="m">糾纏（整體態）</text>
+      <text x="22" y="115">Alice 測得 0</text><text x="192" y="115">Bob 必為 1</text>
+      <text x="22" y="145">Alice 測得 1</text><text x="192" y="145">Bob 必為 0</text>
+      <text x="20" y="190" class="bad" style="fill:var(--bad)">結果是隨機的，不能用來傳訊</text>
+    </svg>
+    <figcaption>Bell 態例子：測量結果完全反相關 [S5]</figcaption>
+  </figure>
+  <ul>
+    <li>一群粒子的量子態無法獨立描述各個粒子，即使相距很遠 <span class="tag">S5</span></li>
+    <li>數學上無法分解成各局部態的乘積；能分解的稱為可分離態 <span class="tag">S5</span></li>
+    <li>Bell 態例：(1/√2)(|0⟩|1⟩ − |1⟩|0⟩)，是最大糾纏態之一 <span class="tag">S5</span></li>
+    <li>Alice 測量得到結果後，能確定預測 Bob 的結果（此例完全反相關），即使相隔遙遠 <span class="tag">S5</span></li>
+    <li class="bad">但不能用於超光速通訊：Alice 的結果是隨機的，她無法選擇 <span class="tag">S5</span></li>
+    <li>糾纏是量子計算可用的資源，也是量子隱形傳態與超密編碼的核心 <span class="tag">S5</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/entanglement.md ｜資料來源：[S1][S5]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/interference.md">
+  <h2>干涉 (interference)：量子演算法的關鍵</h2>
+  <figure>
+    <svg viewBox="0 0 300 260" role="img" aria-label="兩種波疊加：同相放大，反相抵消">
+      <text x="10" y="18">同相：放大（正確答案）</text>
+      <path class="a" d="M10 50 C 35 20, 60 20, 85 50 S 135 80, 160 50 S 210 20, 235 50"/>
+      <path class="a" style="stroke:var(--acc2)" d="M10 50 C 35 30, 60 30, 85 50 S 135 70, 160 50 S 210 30, 235 50"/>
+      <text x="245" y="55" class="m">→ 變大</text>
+      <text x="10" y="128">反相：抵消（錯誤答案）</text>
+      <path class="a" d="M10 170 C 35 140, 60 140, 85 170 S 135 200, 160 170 S 210 140, 235 170"/>
+      <path class="r" d="M10 170 C 35 200, 60 200, 85 170 S 135 140, 160 170 S 210 200, 235 170"/>
+      <text x="245" y="175" class="m">→ 抵消</text>
+      <text x="10" y="240" class="m">示意圖：振幅可為負，因此能互相抵消</text>
+    </svg>
+    <figcaption>演算法利用干涉放大正確答案、抵消錯誤答案 [S6]</figcaption>
+  </figure>
+  <ul>
+    <li>振幅是複數，可以是負的，所以能發生破壞性干涉 <span class="tag">S6</span></li>
+    <li>量子演算法安排操作順序，讓干涉放大正確答案的機率、抵消錯誤答案 <span class="tag">S6</span></li>
+    <li>Z 閘把 |1⟩ 變成 −|1⟩，不改變 |0⟩ <span class="tag">S2</span></li>
+    <li>例：|+⟩ 與 |−⟩ 直接測量看不出差別；先套用 Hadamard 再測量就能完全分辨 <span class="tag">S2</span></li>
+  </ul>
+  <p class="card"><b class="ok">重點：</b>光靠「同時處理很多輸入」不會加速；演算法必須用干涉讓正確答案出現的機率變大 <span class="tag">S6</span></p>
+  <div class="src">Wiki：concepts/interference.md ｜資料來源：[S2][S3][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/decoherence-and-error-correction.md">
+  <h2>退相干與建造量子電腦的挑戰</h2>
+  <figure>
+    <svg viewBox="0 0 280 220" role="img" aria-label="環境干擾使 qubit 退相干">
+      <circle class="b" cx="140" cy="100" r="34"/><text x="124" y="95">qubit</text><text x="116" y="113" class="m">疊加態</text>
+      <rect class="d" x="70" y="30" width="140" height="140" rx="12"/>
+      <path class="r" d="M20 60 L 100 85"/><path class="r" d="M260 60 L 180 85"/><path class="r" d="M140 205 L 140 140"/>
+      <text x="10" y="50" class="m">環境雜訊</text><text x="205" y="50" class="m">環境雜訊</text>
+      <text x="40" y="200" class="m">未隔離 → 退相干 → 錯誤</text>
+    </svg>
+    <figcaption>qubit 必須與環境隔離，否則疊加會消失 [S6]</figcaption>
+  </figure>
+  <div class="cols">
+    <div class="card"><h3>退相干 (decoherence)</h3><ul>
+      <li>qubit 沒有與環境充分隔離就會退相干，帶來雜訊與錯誤 <span class="tag">S6</span></li>
+      <li>退相干不可逆；操作必須遠快於退相干時間 <span class="tag">S6</span></li>
+      <li>有些系統需要極低溫（例如約 20 毫開爾文）<span class="tag">S6</span></li></ul></div>
+    <div class="card"><h3>五個條件 (DiVincenzo)</h3><ul>
+      <li>可擴展、可初始化、耐久</li><li>通用（有通用閘集）、可靠（準確測量）</li>
+      <li>同時滿足是最艱鉅的工程挑戰之一 <span class="tag">S1</span></li></ul></div>
+  </div>
+  <ul>
+    <li>閾值定理：錯誤率夠低時，錯誤更正可壓制錯誤，但需要的實體 qubit 遠多於邏輯 qubit <span class="tag">S6</span></li>
+    <li>估計：用 Shor 分解 2048 位元整數，至少需約 300 萬個實體 qubit <span class="tag">S6</span></li>
+  </ul>
+  <div class="src">Wiki：concepts/decoherence-and-error-correction.md ｜資料來源：[S1][S3][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/misconceptions-and-status.md">
+  <h2>常見迷思與現況</h2>
+  <figure>
+    <svg viewBox="0 0 300 200" role="img" aria-label="疊加可涵蓋多種可能，但測量只回傳一個結果">
+      <rect class="b" x="10" y="20" width="100" height="60" rx="6"/><text x="22" y="46">疊加</text><text x="22" y="66" class="m">許多可能</text>
+      <line class="a" x1="110" y1="50" x2="170" y2="50"/><polygon class="f" points="180,50 168,43 168,57"/>
+      <text x="118" y="40" class="m">測量</text>
+      <rect class="b" x="185" y="20" width="100" height="60" rx="6"/><text x="197" y="46">一個結果</text>
+      <text x="10" y="130" style="fill:var(--bad)">× 不是「一次嘗試所有答案」</text>
+      <text x="10" y="158" style="fill:var(--acc)">✓ 要靠干涉讓正確答案機率變大</text>
+    </svg>
+    <figcaption>平行本身不會加速，必須搭配干涉 [S6]</figcaption>
+  </figure>
+  <div class="cols">
+    <div class="card"><h3 class="bad">迷思</h3><ul>
+      <li>「一次嘗試所有答案」：量子平行只是啟發式說法，測量只回傳一個結果 <span class="tag">S6</span></li>
+      <li>「能解古典解不了的問題」：可計算性上不比古典強，不能解停機問題 <span class="tag">S6</span></li>
+      <li>「所有問題都更快」：加速只針對特定問題 <span class="tag">S6</span></li>
+      <li>「糾纏能超光速傳訊」：結果是隨機的，無法傳遞資訊 <span class="tag">S5</span></li></ul></div>
+    <div class="card"><h3 class="ok">現況（依 2026 年版本）</h3><ul>
+      <li>尚未能用於實際應用；特定任務的量子優勢是科學里程碑 <span class="tag">S6</span></li>
+      <li>容錯量子計算仍遙不可及；NISQ 機器可能有特定用途，但閘雜訊限制可靠度 <span class="tag">S6</span></li></ul></div>
+  </div>
+  <div class="src">Wiki：concepts/misconceptions-and-status.md ｜資料來源：[S1][S5][S6]</div>
+</section>
+
+<section class="slide" data-wiki="concepts/bit-vs-qubit.md,concepts/superposition.md,concepts/measurement.md,concepts/entanglement.md,concepts/interference.md,concepts/misconceptions-and-status.md">
+  <h2>重點回顧與小測驗</h2>
+  <ul>
+    <li>qubit 可處於疊加，但測量只得到一個結果 <span class="tag">S3</span><span class="tag">S6</span></li>
+    <li>量子閘是幺正、可逆的；測量不是閘 <span class="tag">S4</span></li>
+    <li>糾纏是關聯，不是傳訊；干涉才是演算法放大答案的方法 <span class="tag">S5</span><span class="tag">S6</span></li>
+  </ul>
+  <details><summary>Q1　8 個 qubit 可處於 256 種狀態的疊加，那測量時會得到幾個結果？</summary>
+    答：只會得到一個結果。依據：concepts/misconceptions-and-status.md <span class="tag">S6</span></details>
+  <details><summary>Q2　測量糾纏態的一方，可以用來超光速傳遞訊息嗎？</summary>
+    答：不行。結果是隨機的，測量者無法選擇結果。依據：concepts/entanglement.md <span class="tag">S5</span></details>
+  <details><summary>Q3　量子演算法如何讓正確答案勝出？</summary>
+    答：用干涉放大正確答案的機率、抵消錯誤答案。依據：concepts/interference.md <span class="tag">S6</span></details>
+  <div class="src">Wiki：上列各概念頁 ｜資料來源：[S3][S4][S5][S6]</div>
+</section>
+
+<section class="slide" data-wiki="sources/S1.md,sources/S2.md,sources/S3.md,sources/S4.md,sources/S5.md,sources/S6.md">
+  <h2>參考來源</h2>
+  <ul>
+    <li>[S1] Microsoft Learn — What Is Quantum Computing?<br><small>learn.microsoft.com/en-us/azure/quantum/overview-understanding-quantum-computing</small></li>
+    <li>[S2] IBM Quantum Learning — Quantum information<br><small>quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/single-systems/quantum-information</small></li>
+    <li>[S3] Wikipedia — Qubit</li>
+    <li>[S4] Wikipedia — Quantum logic gate</li>
+    <li>[S5] Wikipedia — Quantum entanglement</li>
+    <li>[S6] Wikipedia — Quantum computing</li>
+  </ul>
+  <p class="sub">本簡報內容僅依據 Wiki 整理；Wiki 的 S2–S6 為工具擷取摘要，細節請以原網頁為準。</p>
+  <div class="src">Wiki：sources/S1–S6</div>
+</section>
+
+</div>
+<div class="bar">
+  <button id="prev" type="button">← 上一頁</button>
+  <div class="prog"><i id="pb"></i></div>
+  <span id="cnt"></span>
+  <button id="next" type="button">下一頁 →</button>
+</div>
+</div>
+<script>
+(function(){
+  var s=[].slice.call(document.querySelectorAll('.slide')),i=0;
+  function show(n){
+    i=Math.max(0,Math.min(s.length-1,n));
+    s.forEach(function(e,k){e.classList.toggle('active',k===i)});
+    s[i].scrollTop=0;
+    document.getElementById('cnt').textContent=(i+1)+' / '+s.length;
+    document.getElementById('pb').style.width=((i+1)/s.length*100)+'%';
+    document.getElementById('prev').disabled=i===0;
+    document.getElementById('next').disabled=i===s.length-1;
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown')show(i+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);
+  });
+  var h=parseInt((location.hash||'').slice(1),10);
+  show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
